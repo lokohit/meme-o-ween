@@ -38,15 +38,18 @@
       <div class="rig">
         <div class="rig-inner">
           <img class="p tail" src="assets/character/tail.webp" alt="" />
-          <img class="p leg leg-l" src="assets/character/leg-l.webp" alt="" />
+          <!-- far leg first so the near leg (left on screen) overlaps it; mirroring keeps this right when he walks left -->
           <img class="p leg leg-r" src="assets/character/leg-r.webp" alt="" />
+          <img class="p leg leg-l" src="assets/character/leg-l.webp" alt="" />
           <img class="p arm arm-r" src="assets/character/arm-r.webp" alt="" />
           <img class="p torso" src="assets/character/torso.webp" alt="" />
           <div class="p arm arm-l">
             <img class="bucket" src="assets/character/bucket.webp" alt="" />
             <img src="assets/character/arm-l.webp" alt="" />
           </div>
-          <div class="p head" role="img" aria-label="Pumpkin mascot"><img src="assets/character/face-happy.webp" alt="" /></div>
+          <div class="p head" role="img" aria-label="Pumpkin mascot"><img class="on" src="assets/character/face-happy.webp" alt="" /></div>
+          <!-- the near collar flap, cut from the robe and layered over the head so the head sits inside the collar -->
+          <img class="p torso collar-front" src="assets/character/collar-front.webp" alt="" />
         </div>
       </div>
       <div class="poses"></div>
