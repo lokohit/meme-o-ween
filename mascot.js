@@ -21,6 +21,8 @@
   const bubble = root.querySelector(".mascot-bubble");
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // phones/tablets: a normal flick scroll is "fast", so the tumble would fire on almost every swipe
+  const touchScreen = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
 
   /* ---------- What he says & does in each section ---------- */
   const SECTIONS = {
@@ -281,14 +283,23 @@
     clearTimeout(retryTimer);
     scrolledSincePose = true;
     wake();
-    if (velocity > 6000 && now > busyUntil && !reduceMotion) tumble(); // a really fast flick makes him fall over
+    if (velocity > 6000 && now > busyUntil && !reduceMotion && !touchScreen) tumble(); // a really fast mouse-wheel spin makes him fall over
     targetX = computeTarget();
     if (reduceMotion) { x = targetX; apply(); }
     kick();
     scheduleIdle();
   }, { passive: true });
 
-  window.addEventListener("resize", () => { measure(); x = Math.min(x, window.innerWidth - width - 8); kick(); });
+  // On phones the address bar sliding in/out fires "resize" with only the height changing. That doesn't move
+  // him sideways, so just refresh the page height instead of re-laying him out (which made him shuffle).
+  let lastW = window.innerWidth;
+  window.addEventListener("resize", () => {
+    if (window.innerWidth === lastW) { measurePage(); targetX = computeTarget(); return; }
+    lastW = window.innerWidth;
+    measure();
+    x = Math.min(x, window.innerWidth - width - 8);
+    kick();
+  });
   new ResizeObserver(() => { measurePage(); targetX = computeTarget(); }).observe(document.body);
 
   root.addEventListener("click", (e) => {

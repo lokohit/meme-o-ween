@@ -34,6 +34,12 @@ body {
 }
 img { max-width: 100%; display: block; }
 a { color: inherit; text-decoration: none; cursor: pointer; }
+a, button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+/* Nothing may poke out sideways (the tilted ticker, the moon glow, the fog). On phones even a few
+   extra pixels make the whole page wider than the screen: it drifts sideways, the menu button gets
+   cut off and pinned things like the mascot jitter while scrolling. */
+main, footer { overflow-x: clip; }
+@supports not (overflow: clip) { main, footer { overflow-x: hidden; } }
 strong { color: var(--pumpkin); }
 
 /* ---------- Ambient ---------- */
@@ -312,7 +318,8 @@ h2.drip { font-size: clamp(42px, 6vw, 72px); }
 /* ---------- Easter egg: Candy Rush ---------- */
 .egg { background: none; border: 0; padding: 0; font: inherit; color: inherit; cursor: pointer; line-height: 1; }
 .float-emoji.egg { font-size: 60px; }
-.egg:hover, .egg:focus-visible { animation: wiggle 0.5s ease-in-out infinite; outline: none; }
+.egg:focus-visible { animation: wiggle 0.5s ease-in-out infinite; outline: none; }
+@media (hover: hover) { .egg:hover { animation: wiggle 0.5s ease-in-out infinite; } }
 @keyframes wiggle { 0%, 100% { transform: rotate(0) scale(1.1); } 25% { transform: rotate(-14deg) scale(1.15); } 75% { transform: rotate(14deg) scale(1.15); } }
 .pumpkins .egg { font-size: 34px; display: inline-block; }
 .hint { color: #6d6082; font-size: 13px; font-style: italic; margin-bottom: 6px; }
@@ -381,7 +388,7 @@ body.game-open main *, body.game-open .bats, body.game-open .bats *, body.game-o
 }
 .egg-tip::after { content: ""; position: absolute; right: 30px; bottom: -8px; border: 8px solid transparent; border-bottom: 0; border-top-color: var(--slime); }
 .egg-tip:hover { filter: brightness(1.1); }
-.hint-link { color: var(--slime); font-style: normal; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.hint-link { color: var(--slime); font-style: normal; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; padding: 10px 4px; margin: -10px -4px; } /* bigger tap area, same look */
 .hint-link:hover { animation: none; }
 
 .teaser-card {
@@ -430,7 +437,7 @@ body.game-open main *, body.game-open .bats, body.game-open .bats *, body.game-o
 /* ---------- Mascot ---------- */
 .mascot {
   --s: 0.62; --dir: 1;
-  position: fixed; left: 0; bottom: 6px; z-index: 45;
+  position: fixed; left: 0; bottom: calc(6px + env(safe-area-inset-bottom, 0px)); z-index: 45;
   width: calc(200px * var(--s)); height: calc(266px * var(--s));
   pointer-events: none; will-change: transform;
 }
@@ -507,7 +514,7 @@ body.game-open .mascot { display: none; }
 /* ---------- Responsive ---------- */
 @media (max-width: 980px) {
   .nav-links { display: none; }
-  .hero-grid, .about-grid { grid-template-columns: 1fr; }
+  .hero-grid, .about-grid { grid-template-columns: minmax(0, 1fr); } /* minmax(0,…) lets the column shrink to the screen instead of to its widest child */
   .about-grid { gap: 48px; }
   .tomb-grid, .steps { grid-template-columns: repeat(2, 1fr); }
   .steps { row-gap: 46px; }
@@ -537,7 +544,29 @@ body.game-open .mascot { display: none; }
   .marquee span { font-size: 22px; }
   .section { padding-top: 80px; padding-bottom: 80px; }
   .float-emoji { font-size: 36px; }
+  .float-emoji.egg { font-size: 48px; }
+  .e2 { right: 2%; } /* keep the secret game pumpkin fully on screen */
   .s2 { display: none; }
+}
+
+/* Touch screens: a tap leaves :hover stuck on, so drop the lift/wiggle hover effects and give a press effect instead */
+@media (hover: none) {
+  .btn:hover, .mini:hover, .social:hover, .social:hover .ico, .char-card:hover, .gravestone:hover,
+  .play-chip:hover, .teaser-scene:hover .scene-play { transform: none; }
+  .char-card:hover .char-img { background-size: 290% auto; }
+  .btn:active, .social:active, .play-chip:active, .mini:active { transform: scale(0.96); }
+}
+@media (max-width: 420px) {
+  .nav { padding: 10px 14px; }
+  .brand { gap: 8px; }
+  .brand img { width: 36px; height: 36px; }
+  .brand span { font-size: 19px; }
+  .btn-sm { padding: 9px 15px; font-size: 14px; }
+  .mascot-bubble { font-size: 13px; padding: 8px 12px; max-width: min(210px, 64vw); }
+  .hero { padding-left: 16px; padding-right: 16px; }
+  .cauldron-card { padding: 20px 16px; }
+  .countdown { gap: 6px; }
+  .tomb small { font-size: 10px; letter-spacing: 0.5px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
