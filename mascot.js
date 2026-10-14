@@ -39,7 +39,7 @@
   const CLICK_LINES = [
     "Wen moon? 🌕", "Trick or treat! 🍬", "Not financial advice 👻",
     "Psst… try typing “boo” 🤫", "I'm not a pumpkin, I'm a lifestyle 🎃",
-    "Hold me, I'm scared of paper hands 😱", "Have you joined the Telegram yet? 🦇",
+    "Hold me, I'm scared of paper hands 😱", "Have you joined the Discord yet? 🦇",
   ];
 
   /* ---------- One image per face & pose, all decoded up front ----------
