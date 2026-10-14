@@ -360,6 +360,12 @@ h2.drip { font-size: clamp(42px, 6vw, 72px); }
 .g-final b { font-family: var(--font-spooky); font-weight: 400; font-size: 44px; color: var(--slime); vertical-align: -4px; }
 .g-newbest { color: var(--candle); font-weight: 700; animation: flicker 2s infinite; }
 .g-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 6px; }
+/* Pumpy waving on the start screen / tumbling on the game-over screen (only when the game area is tall enough) */
+.g-pumpy { display: none; height: 104px; width: auto; max-width: none; margin-bottom: -6px; }
+.roomy .g-pumpy { display: block; }
+.g-save { font-size: 14px; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; margin-top: 2px; }
+.g-save:hover { color: var(--bone); }
+.g-save[hidden] { display: none; }
 body.game-open { overflow: hidden; }
 body.game-open main *, body.game-open .bats, body.game-open .bats *, body.game-open .footer * { animation-play-state: paused !important; }
 

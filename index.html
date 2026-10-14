@@ -7,17 +7,27 @@
   <meta name="description" content="MEME-O-WEEN: spooky memes, big dreams. The meme legends crawl out of their crypts this Halloween." />
   <meta name="theme-color" content="#0d0716" />
 
-  <!-- Social preview (swap for a 1200x630 og-image when you have one) -->
-  <meta property="og:title" content="MEME-O-WEEN" />
-  <meta property="og:description" content="Spooky memes. Big dreams. Trick or treat, to the moon!" />
-  <meta property="og:image" content="assets/img/banner.png" />
+  <!-- Link previews (X, Telegram, Discord…). These must be full URLs: if you move to a custom domain,
+       replace https://meme-o-ween.vercel.app in the lines below (the game's Share button reads og:url too). -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="MEME-O-WEEN" />
+  <meta property="og:url" content="https://meme-o-ween.vercel.app/" />
+  <meta property="og:title" content="MEME-O-WEEN | Trick or Treat, to the Moon" />
+  <meta property="og:description" content="Spooky memes. Big dreams. Massive gains. Meet Pumpy and play Candy Rush 🎃" />
+  <meta property="og:image" content="https://meme-o-ween.vercel.app/assets/img/og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="MEME-O-WEEN banner with Pumpy the pumpkin mascot" />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="MEME-O-WEEN | Trick or Treat, to the Moon" />
+  <meta name="twitter:description" content="Spooky memes. Big dreams. Massive gains. Meet Pumpy and play Candy Rush 🎃" />
+  <meta name="twitter:image" content="https://meme-o-ween.vercel.app/assets/img/og-image.jpg" />
 
   <link rel="icon" href="assets/img/mascot.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=16" />
+  <link rel="stylesheet" href="style.css?v=17" />
 </head>
 <body>
   <!-- Ambient layers -->
@@ -89,6 +99,7 @@
       <div class="nav-socials">
         <a data-link="x" class="mini" aria-label="X Community"><img src="assets/icons/icon-x.png" alt="" /></a>
         <a data-link="telegram" class="mini" aria-label="Telegram"><img src="assets/icons/icon-telegram.png" alt="" /></a>
+        <a data-link="discord" class="mini" aria-label="Discord"><img src="assets/icons/icon-discord.png" alt="" /></a>
       </div>
       <a data-link="pumpfun" class="btn btn-pumpkin btn-sm">Buy Now</a>
     </div>
@@ -143,6 +154,7 @@
         <a data-link="dexscreener" class="social"><span class="ico"><img src="assets/icons/icon-dexscreener.png" alt="" /></span>Dexscreener</a>
         <a data-link="telegram" class="social"><span class="ico"><img src="assets/icons/icon-telegram.png" alt="" /></span>Telegram</a>
         <a data-link="x" class="social"><span class="ico"><img src="assets/icons/icon-x.png" alt="" /></span>X Community</a>
+        <a data-link="discord" class="social"><span class="ico"><img src="assets/icons/icon-discord.png" alt="" /></span>Discord</a>
       </div>
 
       <div class="fog" aria-hidden="true"><div class="fog-a"></div><div class="fog-b"></div></div>
@@ -333,6 +345,7 @@
         <div class="social-row">
           <a data-link="telegram" class="social"><span class="ico"><img src="assets/icons/icon-telegram.png" alt="" /></span>Telegram</a>
           <a data-link="x" class="social"><span class="ico"><img src="assets/icons/icon-x.png" alt="" /></span>X Community</a>
+          <a data-link="discord" class="social"><span class="ico"><img src="assets/icons/icon-discord.png" alt="" /></span>Discord</a>
           <a data-link="pumpfun" class="social"><span class="ico"><img src="assets/icons/icon-pumpfun.png" alt="" /></span>Pump.fun</a>
           <a data-link="dexscreener" class="social"><span class="ico"><img src="assets/icons/icon-dexscreener.png" alt="" /></span>Dexscreener</a>
         </div>
@@ -366,6 +379,7 @@
       <div class="game-stage" id="game-stage">
         <canvas id="game-canvas"></canvas>
         <div class="game-screen" id="g-start">
+          <img class="g-pumpy" src="assets/character/pose-wave.webp" alt="" />
           <p class="eyebrow">🤫 You found a secret</p>
           <h2 class="drip" id="game-title">Candy Rush</h2>
           <ul class="g-legend">
@@ -380,6 +394,7 @@
           <button class="btn btn-pumpkin" id="g-play" type="button">Start</button>
         </div>
         <div class="game-screen" id="g-over" hidden>
+          <img class="g-pumpy" src="assets/character/pose-fall.webp" alt="" />
           <h2 class="drip" id="g-over-title">Rugged!</h2>
           <p class="g-final">You bagged <b id="g-final">0</b> candy</p>
           <p class="g-newbest" id="g-newbest" hidden>🏆 New best!</p>
@@ -387,6 +402,7 @@
             <button class="btn btn-pumpkin" id="g-again" type="button">Play Again</button>
             <a class="btn btn-ghost" id="g-share" target="_blank" rel="noopener noreferrer"><img src="assets/icons/icon-x.png" alt="" /> Share Score</a>
           </div>
+          <a class="g-save" id="g-save" download="candy-rush-score.png" hidden>💾 Save score card (to attach to your post)</a>
         </div>
       </div>
     </div>
@@ -394,8 +410,8 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="script.js?v=7"></script>
-  <script src="game.js?v=4"></script>
-  <script src="mascot.js?v=10"></script>
+  <script src="script.js?v=8"></script>
+  <script src="game.js?v=5"></script>
+  <script src="mascot.js?v=11"></script>
 </body>
 </html>

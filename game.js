@@ -11,7 +11,7 @@
   const ui = {
     score: $("g-score"), lives: $("g-lives"), drops: $("g-drops"), overTitle: $("g-over-title"), best: $("g-best"),
     start: $("g-start"), over: $("g-over"), final: $("g-final"), newBest: $("g-newbest"),
-    play: $("g-play"), again: $("g-again"), share: $("g-share"), close: $("game-close"),
+    play: $("g-play"), again: $("g-again"), share: $("g-share"), save: $("g-save"), close: $("game-close"),
   };
 
   const MAX_LIVES = 3;
@@ -66,6 +66,30 @@
     }
   }
 
+  /* ---------- Pumpy is the player: his face reacts to what he catches ---------- */
+  const FACE_FILES = { happy: "face-happy", laugh: "face-laugh", surprised: "face-surprised", evil: "face-evil" };
+  const faces = {};
+  for (const [k, f] of Object.entries(FACE_FILES)) {
+    faces[k] = new Image();
+    faces[k].src = `assets/character/${f}.webp`;
+  }
+  let face = "happy", faceUntil = 0;
+  function makeFace(f, secs) {
+    face = f;
+    faceUntil = t + secs;
+  }
+  function drawPumpy() {
+    const current = t < faceUntil ? face : t < slowUntil ? "evil" : "happy"; // evil grin while slow-mo lasts
+    const img = faces[current];
+    if (!img.complete || !img.naturalWidth) return drawSprite("🎃", PLAYER_SIZE, player.x, player.y, player.tilt);
+    const w = PLAYER_SIZE * 1.2, h = (w * img.naturalHeight) / img.naturalWidth;
+    ctx.save();
+    ctx.translate(player.x, player.y);
+    ctx.rotate(player.tilt);
+    ctx.drawImage(img, -w / 2, -h / 2 - 4, w, h);
+    ctx.restore();
+  }
+
   /* ---------- Layout ---------- */
   function resize() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -74,6 +98,7 @@
     canvas.width = W * dpr;
     canvas.height = H * dpr;
     canvas.style.height = H + "px";
+    stage.classList.toggle("roomy", H >= 470); // only show Pumpy's pose pictures when the screens have room
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     spriteCache.clear();
     bg = paintBackground();
@@ -132,6 +157,8 @@
     lives = MAX_LIVES;
     drops = 0;
     t = 0;
+    face = "happy";
+    faceUntil = 0;
     spawnIn = 0.6;
     slowUntil = 0;
     shake = 0;
@@ -250,6 +277,7 @@
 
   function loseLife(text, x, y) {
     lives--;
+    makeFace("surprised", 0.9);
     shake = 0.35;
     flash = 1;
     pop(text, x, y, "#ff5a5a");
@@ -265,10 +293,12 @@
     }
     if (type.power === "slow") {
       slowUntil = t + 4;
+      makeFace("evil", 0.6);
       pop("SLOW-MO!", it.x, it.y, "#8bff5e");
       return;
     }
     score += type.pts;
+    makeFace("laugh", type.pts >= 5 ? 0.8 : 0.35);
     pop(type.pts >= 5 ? "+5 🚀" : "+" + type.pts, it.x, it.y, type.pts >= 5 ? "#ffd27a" : "#ffa53c");
     renderHud();
   }
@@ -284,7 +314,7 @@
     }
 
     for (const it of items) drawSprite(it.type.e, ITEM_SIZE, it.x, it.y, it.rot);
-    if (player) drawSprite("🎃", PLAYER_SIZE, player.x, player.y, player.tilt);
+    if (player) drawPumpy();
 
     ctx.textAlign = "center";
     ctx.font = '400 24px "Creepster", cursive';
@@ -317,16 +347,17 @@
     ui.overTitle.textContent = title;
     playing = false;
     cancelAnimationFrame(raf);
+    makeFace("surprised", 99);
     draw();
     const isBest = score > best;
     if (isBest) { best = score; saveBest(best); }
     ui.final.textContent = score;
     ui.newBest.hidden = !isBest || score === 0;
     renderHud();
-    const ticker = typeof CONFIG !== "undefined" ? CONFIG.ticker : "";
-    const site = location.protocol.startsWith("http") && !/localhost|127\.0\.0\.1/.test(location.hostname) ? " " + location.origin + location.pathname : "";
-    const text = `I bagged ${score} candy in MEME-O-WEEN Candy Rush 🎃🍬 Can you beat me? ${ticker}${site}`;
-    ui.share.href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text);
+    // the site link makes X show the Pumpy preview image under the post
+    shareText = `I bagged ${score} candy in MEME-O-WEEN Candy Rush 🎃🍬 Can you beat me? ${TICKER} ${SITE}`;
+    ui.share.href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(shareText);
+    prepareCard(score, title);
     ui.over.hidden = false;
     setTimeout(() => ui.again.focus(), 50);
   }
@@ -352,6 +383,115 @@
     document.body.classList.remove("game-open");
     if (lastFocus) lastFocus.focus();
   }
+
+  /* ---------- Score card: a picture of Pumpy + your score to share ---------- */
+  const TICKER = typeof CONFIG !== "undefined" ? CONFIG.ticker : "";
+  const SITE = (document.querySelector('meta[property="og:url"]')?.content || location.origin + "/").replace(/\/$/, "");
+  const SITE_SHORT = SITE.replace(/^https?:\/\//, "");
+  const touchScreen = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+  const cardPumpy = new Image();
+  cardPumpy.src = "assets/character/pumpy-lg.webp";
+  let shareText = "", cardFile = null, cardUrl = null, cardRun = 0;
+
+  // largest font size (down from `size`) at which `text` fits in maxWidth
+  function fitFont(g, text, weight, family, size, maxWidth) {
+    g.font = `${weight} ${size}px ${family}`;
+    while (g.measureText(text).width > maxWidth && size > 20) g.font = `${weight} ${(size -= 4)}px ${family}`;
+  }
+
+  async function makeCard(score, title) {
+    await Promise.all([
+      document.fonts.load('230px "Creepster"'),
+      document.fonts.load('600 44px "Fredoka"'),
+      cardPumpy.decode().catch(() => {}),
+    ]);
+    const CW = 1200, CH = 630, TEXT_W = 640;
+    const c = document.createElement("canvas");
+    c.width = CW;
+    c.height = CH;
+    const g = c.getContext("2d");
+    const sky = g.createLinearGradient(0, 0, 0, CH);
+    sky.addColorStop(0, "#2a1045");
+    sky.addColorStop(0.75, "#140a24");
+    sky.addColorStop(1, "#0b0614");
+    g.fillStyle = sky;
+    g.fillRect(0, 0, CW, CH);
+    const glow = g.createRadialGradient(930, 260, 60, 930, 260, 380);
+    glow.addColorStop(0, "rgba(255,150,40,0.42)");
+    glow.addColorStop(1, "rgba(255,150,40,0)");
+    g.fillStyle = glow;
+    g.fillRect(0, 0, CW, CH);
+    g.fillStyle = "#ffcf7a";
+    g.beginPath();
+    g.arc(1060, 110, 62, 0, Math.PI * 2);
+    g.fill();
+    g.fillStyle = "rgba(246,234,210,0.55)";
+    for (let i = 0; i < 70; i++) g.fillRect((i * 173.3) % CW, (i * 61.7) % 400, 2, 2);
+    g.fillStyle = "#07040d"; // graveyard ground
+    g.beginPath();
+    g.moveTo(0, CH);
+    g.lineTo(0, 582);
+    for (let x = 0; x <= CW; x += 60) g.quadraticCurveTo(x + 30, 566 - (x % 120 ? 0 : 10), x + 60, 582);
+    g.lineTo(CW, CH);
+    g.fill();
+    if (cardPumpy.naturalWidth) {
+      const h = 560, w = (h * cardPumpy.naturalWidth) / cardPumpy.naturalHeight;
+      g.drawImage(cardPumpy, CW - w - 34, CH - h + 6, w, h);
+    }
+    g.textBaseline = "alphabetic";
+    g.fillStyle = "#b98cff";
+    g.font = '600 28px "Fredoka", sans-serif';
+    g.fillText("🎮 CANDY RUSH · MEME-O-WEEN", 60, 86);
+    g.fillStyle = "#ffa53c";
+    g.shadowColor = "rgba(255,122,26,0.6)";
+    g.shadowBlur = 24;
+    fitFont(g, title.toUpperCase(), 400, '"Creepster", cursive', 92, TEXT_W);
+    g.fillText(title.toUpperCase(), 60, 178);
+    g.fillStyle = "#8bff5e";
+    g.shadowColor = "rgba(139,255,94,0.55)";
+    g.shadowBlur = 34;
+    fitFont(g, String(score), 400, '"Creepster", cursive', 230, TEXT_W);
+    g.fillText(String(score), 60, 408);
+    g.shadowBlur = 0;
+    g.fillStyle = "#f6ead2";
+    g.font = '600 46px "Fredoka", sans-serif';
+    g.fillText("candy bagged 🍬", 60, 470);
+    g.fillStyle = "#8bff5e";
+    g.font = '600 36px "Fredoka", sans-serif';
+    g.fillText("Can you beat me?", 60, 522);
+    g.fillStyle = "#ffd27a";
+    const footer = `${TICKER}  ·  ${SITE_SHORT}`;
+    fitFont(g, footer, 600, '"Fredoka", sans-serif', 28, TEXT_W + 60);
+    g.fillText(footer, 60, 616);
+    return new Promise((resolve) => c.toBlob(resolve, "image/png"));
+  }
+
+  // made as soon as the run ends, so tapping Share can hand the picture over instantly
+  function prepareCard(score, title) {
+    const run = ++cardRun;
+    cardFile = null;
+    ui.save.hidden = true;
+    if (cardUrl) URL.revokeObjectURL(cardUrl);
+    cardUrl = null;
+    makeCard(score, title).then((blob) => {
+      if (!blob || run !== cardRun) return;
+      cardFile = new File([blob], "candy-rush-score.png", { type: "image/png" });
+      cardUrl = URL.createObjectURL(blob);
+      ui.save.href = cardUrl;
+      ui.save.hidden = touchScreen; // phones attach it through the share menu instead
+    }).catch(() => {});
+  }
+
+  // phones: share the picture itself (pick X in the share menu). Computers: the link opens X with the text + site link.
+  ui.share.addEventListener("click", async (e) => {
+    if (!touchScreen || !cardFile || !navigator.canShare || !navigator.canShare({ files: [cardFile] })) return;
+    e.preventDefault();
+    try {
+      await navigator.share({ files: [cardFile], text: shareText });
+    } catch (err) {
+      if (err.name !== "AbortError") window.open(ui.share.href, "_blank", "noopener");
+    }
+  });
 
   /* ---------- Input ---------- */
   function pointer(e) {

@@ -77,7 +77,7 @@
   let raf = 0, lastT = 0;
   let face = "happy", mode = "rig", pose = null;
   let sleeping = false, busyUntil = 0;
-  let scrolledSincePose = false;
+  let scrolledSincePose = false, clickHold = false;
   let section = "hero", bubbleSection = null; // which section the bubble currently on screen belongs to
   let idleTimer = 0, bubbleTimer = 0, poseTimer = 0;
 
@@ -282,6 +282,7 @@
     const velocity = recent.reduce((n, r) => n + r[1], 0) / 0.3; // px per second over the last 300ms
     clearTimeout(retryTimer);
     scrolledSincePose = true;
+    if (clickHold) { clickHold = false; busyUntil = 0; } // scrolling away: don't keep waiting on the click line
     wake();
     if (velocity > 6000 && now > busyUntil && !reduceMotion && !touchScreen) tumble(); // a really fast mouse-wheel spin makes him fall over
     targetX = computeTarget();
@@ -309,8 +310,13 @@
     endPose();
     setFace("laugh");
     body.animate([{ translate: "0 0" }, { translate: "0 -26px", offset: 0.4 }, { translate: "0 0" }], { duration: 450, easing: "ease-out" });
-    say(CLICK_LINES[Math.floor(Math.random() * CLICK_LINES.length)], 2600);
+    const line = CLICK_LINES[Math.floor(Math.random() * CLICK_LINES.length)];
+    const dur = readTime(line);
+    say(line, dur);
     setTimeout(() => face === "laugh" && setFace("happy"), 1200);
+    // hold the section line back until the click line has had its full reading time
+    busyUntil = performance.now() + dur;
+    clickHold = true;
     scheduleIdle();
   });
 

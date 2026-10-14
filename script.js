@@ -12,6 +12,7 @@ const CONFIG = {
     dexscreener: "",
     telegram: "",
     x: "",                                   // X Community URL
+    discord: "https://discord.gg/tokenmotion",
   },
 };
 
@@ -19,7 +20,7 @@ const CONFIG = {
 document.querySelectorAll("[data-ticker]").forEach((el) => (el.textContent = CONFIG.ticker));
 document.getElementById("year").textContent = new Date().getFullYear();
 
-const LINK_NAMES = { pumpfun: "Pump.fun", dexscreener: "Dexscreener", telegram: "Telegram", x: "X Community" };
+const LINK_NAMES = { pumpfun: "Pump.fun", dexscreener: "Dexscreener", telegram: "Telegram", x: "X Community", discord: "Discord" };
 
 document.querySelectorAll("[data-link]").forEach((el) => {
   const key = el.dataset.link;
