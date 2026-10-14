@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MEME-O-WEEN | Trick or Treat, to the Moon</title>
+  <meta name="description" content="MEME-O-WEEN: spooky memes, big dreams. The meme legends crawl out of their crypts this Halloween." />
+  <meta name="theme-color" content="#0d0716" />
+
+  <!-- Social preview (swap for a 1200x630 og-image when you have one) -->
+  <meta property="og:title" content="MEME-O-WEEN" />
+  <meta property="og:description" content="Spooky memes. Big dreams. Trick or treat, to the moon!" />
+  <meta property="og:image" content="assets/img/banner.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" href="assets/img/mascot.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css?v=12" />
+</head>
+<body>
+  <!-- Ambient layers -->
+  <canvas id="embers" aria-hidden="true"></canvas>
+  <div class="lightning" aria-hidden="true"></div>
+  <div class="bats" aria-hidden="true">
+    <span class="bat b1"><svg viewBox="0 0 100 50"><use href="#bat" /></svg></span>
+    <span class="bat b2"><svg viewBox="0 0 100 50"><use href="#bat" /></svg></span>
+    <span class="bat b3"><svg viewBox="0 0 100 50"><use href="#bat" /></svg></span>
+    <span class="bat b4"><svg viewBox="0 0 100 50"><use href="#bat" /></svg></span>
+    <span class="bat b5"><svg viewBox="0 0 100 50"><use href="#bat" /></svg></span>
+  </div>
+
+  <!-- MASCOT: walks along the bottom as you scroll (mascot.js) -->
+  <div class="mascot" id="mascot" title="Click me!">
+    <div class="mascot-bubble" role="status" aria-live="polite"></div>
+    <div class="mascot-body">
+      <div class="rig">
+        <div class="rig-inner">
+          <img class="p tail" src="assets/character/tail.webp" alt="" />
+          <img class="p leg leg-l" src="assets/character/leg-l.webp" alt="" />
+          <img class="p leg leg-r" src="assets/character/leg-r.webp" alt="" />
+          <img class="p arm arm-r" src="assets/character/arm-r.webp" alt="" />
+          <img class="p torso" src="assets/character/torso.webp" alt="" />
+          <div class="p arm arm-l">
+            <img class="bucket" src="assets/character/bucket.webp" alt="" />
+            <img src="assets/character/arm-l.webp" alt="" />
+          </div>
+          <div class="p head" role="img" aria-label="Pumpkin mascot"><img src="assets/character/face-happy.webp" alt="" /></div>
+        </div>
+      </div>
+      <div class="poses"></div>
+    </div>
+    <span class="zzz" aria-hidden="true"><i>z</i><i>z</i><i>Z</i></span>
+  </div>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="bat" viewBox="0 0 100 50">
+        <path d="M50 16c-2-5-5-6-6-2-5-9-17-13-30-9 6 4 8 10 6 16-6-4-14-2-20 4 12 0 20 6 22 14 6-6 14-6 20-2 2-6 5-8 8-8s6 2 8 8c6-4 14-4 20 2 2-8 10-14 22-14-6-6-14-8-20-4-2-6 0-12 6-16-13-4-25 0-30 9-1-4-4-3-6 2z" fill="currentColor"/>
+      </symbol>
+      <symbol id="web" viewBox="0 0 100 100">
+        <g fill="none" stroke="currentColor" stroke-width="1.2">
+          <path d="M0 0L100 100M0 0L50 100M0 0L100 50M0 0L0 100M0 0L100 0"/>
+          <path d="M0 20Q14 14 20 0M0 40Q30 30 40 0M0 62Q46 46 62 0M0 84Q62 62 84 0"/>
+        </g>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- NAV -->
+  <header class="nav" id="nav">
+    <a href="#top" class="brand">
+      <img src="assets/img/mascot.jpg" alt="" />
+      <span>MEME-O-WEEN</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#about">About</a>
+      <a href="#coven">The Coven</a>
+      <a href="#tokenomics">Tokenomics</a>
+      <a href="#how">How to Buy</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#game-teaser" class="nav-play">🎮 Play</a>
+    </nav>
+    <div class="nav-right">
+      <div class="nav-socials">
+        <a data-link="x" class="mini" aria-label="X Community"><img src="assets/icons/icon-x.png" alt="" /></a>
+        <a data-link="telegram" class="mini" aria-label="Telegram"><img src="assets/icons/icon-telegram.png" alt="" /></a>
+      </div>
+      <a data-link="pumpfun" class="btn btn-pumpkin btn-sm">Buy Now</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero" id="hero">
+      <div class="moon-glow" aria-hidden="true"></div>
+      <div class="spider s1" aria-hidden="true"><span class="thread"></span><span class="body">🕷️</span></div>
+      <div class="spider s2" aria-hidden="true"><span class="thread"></span><span class="body">🕷️</span></div>
+
+      <div class="banner-frame reveal">
+        <svg class="web web-tl" aria-hidden="true"><use href="#web" /></svg>
+        <svg class="web web-tr" aria-hidden="true"><use href="#web" /></svg>
+        <img src="assets/img/banner.png" alt="MEME-O-WEEN banner: spooky memes, big dreams, massive gains. Trick or treat, to the moon!" />
+      </div>
+
+      <div class="hero-grid">
+        <div class="hero-copy reveal">
+          <p class="eyebrow">🎃 Launching Friday on Pump.fun</p>
+          <h1 class="drip">Trick or Treat,<br /><span>to the Moon.</span></h1>
+          <p class="lead">
+            Every October the meme legends crawl out of their crypts. Doge, Shib and Pepe are dressed up, buckets in paw,
+            and they're going door to door for one thing: <strong>massive gains</strong>. Grab a bag, it's <span data-ticker></span> season.
+          </p>
+          <div class="cta-row">
+            <a data-link="pumpfun" class="btn btn-pumpkin"><img src="assets/icons/icon-pumpfun.png" alt="" /> Buy on Pump.fun</a>
+            <a data-link="dexscreener" class="btn btn-ghost"><img src="assets/icons/icon-dexscreener.png" alt="" /> View Chart</a>
+          </div>
+          <button class="play-chip" type="button" data-game>🎮 Bored waiting for launch? <u>Play Candy Rush</u> →</button>
+        </div>
+
+        <aside class="cauldron-card reveal">
+          <p class="card-label" id="countdown-label">The summoning begins in</p>
+          <div class="countdown" id="countdown">
+            <div class="tomb"><span id="cd-d">00</span><small>Days</small></div>
+            <div class="tomb"><span id="cd-h">00</span><small>Hours</small></div>
+            <div class="tomb"><span id="cd-m">00</span><small>Mins</small></div>
+            <div class="tomb"><span id="cd-s">00</span><small>Secs</small></div>
+          </div>
+          <p class="card-label">Contract address</p>
+          <button class="ca" id="ca-btn" type="button">
+            <code id="ca-text">Revealed at launch 👻</code>
+            <span class="ca-copy" id="ca-copy">Copy</span>
+          </button>
+        </aside>
+      </div>
+
+      <div class="social-row reveal">
+        <a data-link="pumpfun" class="social"><span class="ico"><img src="assets/icons/icon-pumpfun.png" alt="" /></span>Pump.fun</a>
+        <a data-link="dexscreener" class="social"><span class="ico"><img src="assets/icons/icon-dexscreener.png" alt="" /></span>Dexscreener</a>
+        <a data-link="telegram" class="social"><span class="ico"><img src="assets/icons/icon-telegram.png" alt="" /></span>Telegram</a>
+        <a data-link="x" class="social"><span class="ico"><img src="assets/icons/icon-x.png" alt="" /></span>X Community</a>
+      </div>
+
+      <div class="fog" aria-hidden="true"><div class="fog-a"></div><div class="fog-b"></div></div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>TRICK OR TREAT 🎃 TO THE MOON 🚀 <i data-ticker></i> 👻 SPOOKY MEMES 🦇 BIG DREAMS 🕸️ MASSIVE GAINS 🍬 RIP FIAT 🪦 </span>
+        <span>TRICK OR TREAT 🎃 TO THE MOON 🚀 <i data-ticker></i> 👻 SPOOKY MEMES 🦇 BIG DREAMS 🕸️ MASSIVE GAINS 🍬 RIP FIAT 🪦 </span>
+      </div>
+    </div>
+
+    <!-- ABOUT -->
+    <section class="section about" id="about">
+      <div class="about-grid">
+        <div class="portal reveal">
+          <div class="portal-ring" aria-hidden="true"></div>
+          <img src="assets/img/mascot.jpg" alt="Shiba vampire, Doge witch and Pepe witch holding pumpkin buckets in front of a haunted castle" />
+          <span class="float-emoji e1" aria-hidden="true">🍬</span>
+          <button class="float-emoji e2 egg" type="button" data-game aria-label="Play the Candy Rush mini game">🎃</button>
+          <button class="egg-tip" type="button" data-game>Click me to play! 🎮</button>
+          <span class="float-emoji e3" aria-hidden="true">👻</span>
+        </div>
+        <div class="about-copy reveal">
+          <p class="eyebrow">What is <span data-ticker></span>?</p>
+          <h2 class="drip">The Spookiest Bag<br />on Solana</h2>
+          <p>
+            MEME-O-WEEN is a Halloween party for the whole meme graveyard. No roadmaps written in blood, no suits, no boring
+            utility pitch. Just the OG memes in costume, a community that howls together, and one simple mission:
+            send this pumpkin to the moon before the clock strikes midnight on October 31st.
+          </p>
+          <ul class="chips">
+            <li>🪄 Fair launch on Pump.fun</li>
+            <li>🧛 Community owned</li>
+            <li>🍭 Pure meme energy</li>
+            <li>🌕 Moon-bound by Halloween</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- COVEN -->
+    <section class="section coven" id="coven">
+      <div class="section-head reveal">
+        <p class="eyebrow">Meet the trick-or-treaters</p>
+        <h2 class="drip">The Coven</h2>
+      </div>
+      <div class="coven-grid">
+        <article class="char-card reveal">
+          <div class="char-img c-shib" role="img" aria-label="Shiba Inu dressed as a vampire"></div>
+          <h3>Count Shibula</h3>
+          <p>Pink beanie, vampire cape, zero mercy for paper hands. Only comes out at night and only buys the dip.</p>
+        </article>
+        <article class="char-card reveal">
+          <div class="char-img c-doge" role="img" aria-label="Doge dressed as a witch"></div>
+          <h3>The Doge Witch</h3>
+          <p>Much spell. Very brew. Stirs the cauldron of memes and brews green candles for anyone who holds.</p>
+        </article>
+        <article class="char-card reveal">
+          <div class="char-img c-pepe" role="img" aria-label="Pepe the frog dressed as a witch"></div>
+          <h3>Pepe the Hex</h3>
+          <p>Rare, cursed and smug about it. Turns fiat into frogs and frogs into gains. Feels good, man.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- TOKENOMICS -->
+    <section class="section tokenomics" id="tokenomics">
+      <div class="section-head reveal">
+        <p class="eyebrow">The potion recipe</p>
+        <h2 class="drip">Tokenomics</h2>
+      </div>
+      <div class="tomb-grid">
+        <div class="gravestone reveal"><span class="g-ico">🪦</span><strong>1B</strong><small>Total Supply</small></div>
+        <div class="gravestone reveal"><span class="g-ico">🧪</span><strong>0%</strong><small>Buy / Sell Tax</small></div>
+        <div class="gravestone reveal"><span class="g-ico">🔥</span><strong>Burned</strong><small>Liquidity</small></div>
+        <div class="gravestone reveal"><span class="g-ico">🔒</span><strong>Revoked</strong><small>Mint &amp; Freeze</small></div>
+      </div>
+    </section>
+
+    <!-- HOW TO BUY -->
+    <section class="section how" id="how">
+      <div class="section-head reveal">
+        <p class="eyebrow">Fill your candy bucket</p>
+        <h2 class="drip">How to Buy</h2>
+      </div>
+      <ol class="steps">
+        <li class="step reveal">
+          <span class="step-n">1</span>
+          <h3>Get a Wallet</h3>
+          <p>Download Phantom or Solflare from the app store or as a browser extension.</p>
+        </li>
+        <li class="step reveal">
+          <span class="step-n">2</span>
+          <h3>Load Up SOL</h3>
+          <p>Buy SOL on an exchange or right inside your wallet, then keep it there for the swap.</p>
+        </li>
+        <li class="step reveal">
+          <span class="step-n">3</span>
+          <h3>Head to Pump.fun</h3>
+          <p>Hit the Buy button on this page, connect your wallet and paste the official CA.</p>
+        </li>
+        <li class="step reveal">
+          <span class="step-n">4</span>
+          <h3>Swap &amp; Haunt</h3>
+          <p>Swap SOL for <span data-ticker></span>, then join the Telegram and X community and start haunting.</p>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ROADMAP -->
+    <section class="section roadmap" id="roadmap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Moon phases</p>
+        <h2 class="drip">The Witching Hours</h2>
+      </div>
+      <div class="timeline">
+        <div class="phase reveal">
+          <span class="phase-moon">🌑</span>
+          <h3>Phase 1 · The Summoning</h3>
+          <ul>
+            <li>Launch on Pump.fun</li>
+            <li>Telegram &amp; X Community open</li>
+            <li>First 500 trick-or-treaters</li>
+          </ul>
+        </div>
+        <div class="phase reveal">
+          <span class="phase-moon">🌓</span>
+          <h3>Phase 2 · The Haunting</h3>
+          <ul>
+            <li>Bond the curve and migrate</li>
+            <li>Dexscreener profile &amp; boost</li>
+            <li>Costume meme contests</li>
+          </ul>
+        </div>
+        <div class="phase reveal">
+          <span class="phase-moon">🌕</span>
+          <h3>Phase 3 · Full Moon</h3>
+          <ul>
+            <li>CoinGecko &amp; CMC listings</li>
+            <li>Halloween night mega raid</li>
+            <li>Trick or treat, to the moon 🚀</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- MINI GAME TEASER -->
+    <section class="section game-teaser" id="game-teaser">
+      <div class="teaser-card reveal">
+        <div class="teaser-copy">
+          <p class="eyebrow">🎮 Mini game</p>
+          <h2 class="drip">Candy Rush</h2>
+          <p>
+            Catch the falling candy in your pumpkin bucket, grab the gold coins and dodge the skulls, because skulls are rugs.
+            It gets faster the longer you last. Set a high score and flex it on X.
+          </p>
+          <ul class="g-legend teaser-legend">
+            <li>🍬 🍭 <b>+1</b></li>
+            <li>🍫 <b>+2</b></li>
+            <li>🪙 <b>+5</b></li>
+            <li>🧪 <b>Slow-mo</b></li>
+            <li class="bad">💀 <b>Rug!</b></li>
+            <li class="bad">⬇️ Drop candy <b>−1</b></li>
+          </ul>
+          <button class="btn btn-pumpkin btn-play" type="button" data-game>▶ Play Now</button>
+        </div>
+        <button class="teaser-scene" type="button" data-game aria-label="Play Candy Rush">
+          <span class="drop d1">🍬</span>
+          <span class="drop d2">🪙</span>
+          <span class="drop d3">🍭</span>
+          <span class="drop d4">💀</span>
+          <span class="drop d5">🍫</span>
+          <span class="scene-bucket">🎃</span>
+          <span class="scene-play">▶</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section join reveal" id="join">
+      <div class="join-card">
+        <svg class="web web-tl" aria-hidden="true"><use href="#web" /></svg>
+        <svg class="web web-tr" aria-hidden="true"><use href="#web" /></svg>
+        <h2 class="drip">Join the Coven</h2>
+        <p>The party starts Friday. Get in early, grab your costume and don't be the one left holding an empty bucket.</p>
+        <div class="social-row">
+          <a data-link="telegram" class="social"><span class="ico"><img src="assets/icons/icon-telegram.png" alt="" /></span>Telegram</a>
+          <a data-link="x" class="social"><span class="ico"><img src="assets/icons/icon-x.png" alt="" /></span>X Community</a>
+          <a data-link="pumpfun" class="social"><span class="ico"><img src="assets/icons/icon-pumpfun.png" alt="" /></span>Pump.fun</a>
+          <a data-link="dexscreener" class="social"><span class="ico"><img src="assets/icons/icon-dexscreener.png" alt="" /></span>Dexscreener</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" id="footer">
+    <div class="pumpkins"><span aria-hidden="true">🎃 🕯️ </span><button class="egg" type="button" data-game aria-label="A suspicious pumpkin">🎃</button><span aria-hidden="true"> 🕯️ 🎃</span></div>
+    <p class="brand-foot">MEME-O-WEEN</p>
+    <p class="disclaimer">
+      <span data-ticker></span> is a memecoin with no intrinsic value or expectation of financial return. It is for
+      entertainment purposes only. Crypto is volatile, so never spend more than you can afford to lose. DYOR.
+    </p>
+    <p class="hint">🕯️ Psst… click the pumpkins to play <button class="egg hint-link" type="button" data-game>Candy Rush</button>, or just type “boo”.</p>
+    <p class="copy">© <span id="year"></span> MEME-O-WEEN. All rights reserved by the ghosts.</p>
+  </footer>
+
+  <!-- EASTER EGG: Candy Rush -->
+  <div class="game" id="game" hidden role="dialog" aria-modal="true" aria-labelledby="game-title">
+    <div class="game-card">
+      <button class="game-close" id="game-close" type="button" aria-label="Close game">✕</button>
+      <div class="game-hud">
+        <span>🍬 <b id="g-score">0</b></span>
+        <span class="g-lives-wrap">
+          <span id="g-lives" aria-label="Lives">🎃🎃🎃</span>
+          <span class="g-drops" id="g-drops" title="Every 5 dropped candies costs a life">○○○○○</span>
+        </span>
+        <span>Best <b id="g-best">0</b></span>
+      </div>
+      <div class="game-stage" id="game-stage">
+        <canvas id="game-canvas"></canvas>
+        <div class="game-screen" id="g-start">
+          <p class="eyebrow">🤫 You found a secret</p>
+          <h2 class="drip" id="game-title">Candy Rush</h2>
+          <ul class="g-legend">
+            <li>🍬 🍭 <b>+1</b></li>
+            <li>🍫 <b>+2</b></li>
+            <li>🪙 <b>+5</b></li>
+            <li>🧪 <b>Slow-mo</b></li>
+            <li class="bad">💀 <b>Rug! −1 life</b></li>
+            <li class="bad">⬇️ Drop candy <b>−1</b> · 5 drops <b>−1 life</b></li>
+          </ul>
+          <p class="g-how">Move with your mouse, finger or ← → keys</p>
+          <button class="btn btn-pumpkin" id="g-play" type="button">Start</button>
+        </div>
+        <div class="game-screen" id="g-over" hidden>
+          <h2 class="drip" id="g-over-title">Rugged!</h2>
+          <p class="g-final">You bagged <b id="g-final">0</b> candy</p>
+          <p class="g-newbest" id="g-newbest" hidden>🏆 New best!</p>
+          <div class="g-actions">
+            <button class="btn btn-pumpkin" id="g-again" type="button">Play Again</button>
+            <a class="btn btn-ghost" id="g-share" target="_blank" rel="noopener noreferrer"><img src="assets/icons/icon-x.png" alt="" /> Share Score</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js?v=7"></script>
+  <script src="game.js?v=4"></script>
+  <script src="mascot.js?v=9"></script>
+</body>
+</html>
