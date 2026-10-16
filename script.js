@@ -10,8 +10,8 @@ const CONFIG = {
   links: {
     pumpfun: "",
     dexscreener: "",
-    telegram: "",
-    x: "",                                   // X Community URL
+    telegram: "https://t.me/memeoween",
+    x: "https://x.com/i/communities/2012613122297663528", // X Community URL
     discord: "https://discord.gg/tokenmotion",
   },
 };
