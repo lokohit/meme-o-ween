@@ -5,7 +5,7 @@
 const CONFIG = {
   ticker: "$MEMEOWEEN",
   mascotName: "Pumpy",                      // the walking pumpkin buddy's name
-  contractAddress: "",                       // paste the CA here once it's live
+  contractAddress: "DrXy86UtnzvRtzptnw4JKqgLmkA9MLVV4LLoMJtnpump", // token contract address
   launchDate: "2026-10-16T20:00:00Z",        // Friday launch time (UTC)
   links: {
     pumpfun: "",
